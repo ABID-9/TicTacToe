@@ -1,77 +1,131 @@
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+
+import java.util.Scanner;
 
 public class TicTacToe {
-    int boardWidth = 600;
-    int boardHeight = 650; //50px for the text panel on top
 
-    JFrame frame = new JFrame("Tic-Tac-Toe");
-    JLabel textLabel = new JLabel();
-    JPanel textPanel = new JPanel();
-    JPanel boardPanel = new JPanel();
+    static char[][] board = {
+        {' ', ' ', ' '},
+        {' ', ' ', ' '},
+        {' ', ' ', ' '}
+    };
 
-    JButton[][] board = new JButton[3][3];
-    String playerX = "X";
-    String playerO = "O";
-    String currentPlayer = playerX;
+    static char currentPlayer = 'X';
 
-    boolean gameOver = false;
-    int turns = 0;
+    public static void main(String[] args) {
 
-    TicTacToe() {
-        frame.setVisible(true);
-        frame.setSize(boardWidth, boardHeight);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
+        Scanner sc = new Scanner(System.in);
 
-        textLabel.setBackground(Color.darkGray);
-        textLabel.setForeground(Color.white);
-        textLabel.setFont(new Font("Arial", Font.BOLD, 50));
-        textLabel.setHorizontalAlignment(JLabel.CENTER);
-        textLabel.setText("Tic-Tac-Toe");
-        textLabel.setOpaque(true);
+        System.out.println("===== TIC TAC TOE =====");
+        System.out.println("Player 1: X");
+        System.out.println("Player 2: O");
 
-        textPanel.setLayout(new BorderLayout());
-        textPanel.add(textLabel);
-        frame.add(textPanel, BorderLayout.NORTH);
+        while (true) {
 
-        boardPanel.setLayout(new GridLayout(3, 3));
-        boardPanel.setBackground(Color.darkGray);
-        frame.add(boardPanel);
+            printBoard();
 
-        for (int r = 0; r < 3; r++) {
-            for (int c = 0; c < 3; c++) {
-                JButton tile = new JButton();
-                board[r][c] = tile;
-                boardPanel.add(tile);
+            System.out.println("Player " + currentPlayer + "'s turn");
 
-                tile.setBackground(Color.darkGray);
-                tile.setForeground(Color.white);
-                tile.setFont(new Font("Arial", Font.BOLD, 120));
-                tile.setFocusable(false);
-                // tile.setText(currentPlayer);
+            System.out.print("Enter row (1-3): ");
+            int row = sc.nextInt() - 1;
 
-                tile.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        if (gameOver) return;
-                        JButton tile = (JButton) e.getSource();
-                        if (tile.getText() == "") {
-                            tile.setText(currentPlayer);
-                            turns++;
-                            checkWinner();
-                            if (!gameOver) {
-                                currentPlayer = currentPlayer == playerX ? playerO : playerX;
-                                textLabel.setText(currentPlayer + "'s turn.");
-                            }
-                        }
+            System.out.print("Enter column (1-3): ");
+            int col = sc.nextInt() - 1;
 
-                    }
-                });
+            if (row < 0 || row > 2 || col < 0 || col > 2) {
+                System.out.println("Invalid position! Try again.");
+                continue;
+            }
+
+            if (board[row][col] != ' ') {
+                System.out.println("Position already taken! Try again.");
+                continue;
+            }
+
+            board[row][col] = currentPlayer;
+
+            if (checkWinner()) {
+                printBoard();
+                System.out.println("Player " + currentPlayer + " Wins!");
+                break;
+            }
+
+            if (isDraw()) {
+                printBoard();
+                System.out.println("Game Draw!");
+                break;
+            }
+
+            currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+        }
+
+        sc.close();
+    }
+
+    public static void printBoard() {
+
+        System.out.println();
+
+        for (int i = 0; i < 3; i++) {
+
+            System.out.println(" " + board[i][0] + " | "
+                    + board[i][1] + " | " + board[i][2]);
+
+            if (i < 2) {
+                System.out.println("---+---+---");
             }
         }
+
+        System.out.println();
     }
-    
+
+    public static boolean checkWinner() {
+
+        // Check rows
+        for (int i = 0; i < 3; i++) {
+            if (board[i][0] == currentPlayer &&
+                board[i][1] == currentPlayer &&
+                board[i][2] == currentPlayer) {
+                return true;
+            }
+        }
+
+        // Check columns
+        for (int i = 0; i < 3; i++) {
+            if (board[0][i] == currentPlayer &&
+                board[1][i] == currentPlayer &&
+                board[2][i] == currentPlayer) {
+                return true;
+            }
+        }
+
+        // Check diagonal
+        if (board[0][0] == currentPlayer &&
+            board[1][1] == currentPlayer &&
+            board[2][2] == currentPlayer) {
+            return true;
+        }
+
+        if (board[0][2] == currentPlayer &&
+            board[1][1] == currentPlayer &&
+            board[2][0] == currentPlayer) {
+            return true;
+        }
+
+        return false;
+    }
+
+    // Check draw
+    public static boolean isDraw() {
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+
+                if (board[i][j] == ' ') {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 }

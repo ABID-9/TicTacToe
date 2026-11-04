@@ -19,36 +19,44 @@ public class App {
         int choice = sc.nextInt();
         sc.nextLine();
 
+        boolean success = false;
+
         if (choice == 1) {
 
-            // Register first
             obj.register();
 
-            // Then Login
-            boolean success = obj.login();
+            System.out.println("\nNow Login to continue.");
 
-            // Start game
-            if (success) {
+            success = obj.login();
 
-                TicTacToe game = new TicTacToe();
+        } 
+        else if (choice == 2) {
 
-            }
+            success = obj.login();
 
-        } else if (choice == 2) {
-
-            // Login directly
-            boolean success = obj.login();
-
-            if (success) {
-
-                TicTacToe game = new TicTacToe();
-
-            }
-
-        } else {
+        } 
+        else {
 
             System.out.println("Invalid Choice!");
+            return;
 
         }
+
+        // Start Terminal Game
+        if (success) {
+
+            System.out.println("\nLogin Successful!");
+            System.out.println("Starting Tic Tac Toe...\n");
+
+            TicTacToe.main(new String[0]);
+
+        } 
+        else {
+
+            System.out.println("Login Failed!");
+
+        }
+
+        sc.close();
     }
 }
