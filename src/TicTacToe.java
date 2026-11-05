@@ -61,63 +61,79 @@ public class TicTacToe {
         sc.close();
     }
 
+    // Print Board with Row and Column Numbers
     public static void printBoard() {
 
         System.out.println();
 
+        System.out.println("       COLUMN");
+        System.out.println("        1   2   3");
+        System.out.println("      +---+---+---+");
+
         for (int i = 0; i < 3; i++) {
 
-            System.out.println(" " + board[i][0] + " | "
-                    + board[i][1] + " | " + board[i][2]);
+            System.out.print("  " + (i + 1) + "   ");
 
-            if (i < 2) {
-                System.out.println("---+---+---");
-            }
+            System.out.print("| " + board[i][0] + " ");
+            System.out.print("| " + board[i][1] + " ");
+            System.out.println("| " + board[i][2] + " |");
+
+            System.out.println("      +---+---+---+");
         }
 
+        System.out.println("      ROW");
         System.out.println();
     }
 
+    // Check Winner
     public static boolean checkWinner() {
 
-        // Check rows
+        // Rows
         for (int i = 0; i < 3; i++) {
+
             if (board[i][0] == currentPlayer &&
                 board[i][1] == currentPlayer &&
                 board[i][2] == currentPlayer) {
+
                 return true;
             }
         }
 
-        // Check columns
+        // Columns
         for (int i = 0; i < 3; i++) {
+
             if (board[0][i] == currentPlayer &&
                 board[1][i] == currentPlayer &&
                 board[2][i] == currentPlayer) {
+
                 return true;
             }
         }
 
-        // Check diagonal
+        // Diagonal 1
         if (board[0][0] == currentPlayer &&
             board[1][1] == currentPlayer &&
             board[2][2] == currentPlayer) {
+
             return true;
         }
 
+        // Diagonal 2
         if (board[0][2] == currentPlayer &&
             board[1][1] == currentPlayer &&
             board[2][0] == currentPlayer) {
+
             return true;
         }
 
         return false;
     }
 
-    // Check draw
+    // Check Draw
     public static boolean isDraw() {
 
         for (int i = 0; i < 3; i++) {
+
             for (int j = 0; j < 3; j++) {
 
                 if (board[i][j] == ' ') {
